@@ -1,0 +1,26 @@
+{
+  "name": "discobot",
+  "version": "1.0.0",
+  "description": "A bot for Discord using gpt-2",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "npx nodemon -q",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ericvrp/discobot.git"
+  },
+  "keywords": [],
+  "author": "Eric van Riet Paap",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ericvrp/discobot/issues"
+  },
+  "homepage": "https://github.com/ericvrp/discobot#readme",
+  "dependencies": {
+    "discord.js": "^12.4.1",
+    "dotenv": "^8.2.0"
+  }
+}
