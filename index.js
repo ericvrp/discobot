@@ -13,10 +13,10 @@ client.on("ready", () => {
 const gpt2 = (prompt, channel) => {
   console.log("Model prompt >>>", prompt);
 
-  // --length=80
+  // 124M 355M 774M 1558M
   const docker = spawn(
     "docker",
-    "run -i gpt-2 python src/interactive_conditional_samples.py --model_name=774M".split(
+    "run -i gpt-2 python src/interactive_conditional_samples.py --model_name=1558M".split(
       " "
     )
   );
@@ -34,8 +34,8 @@ const gpt2 = (prompt, channel) => {
         s.startsWith("Model prompt >>>")
       )
         continue;
-      console.log(s);
-      channel.send(s);
+      console.log(prompt + " : " + s);
+      channel.send(prompt + " : " + s);
     }
   });
 
@@ -48,7 +48,10 @@ const gpt2 = (prompt, channel) => {
 };
 
 client.on("message", (msg) => {
-  if (!msg.mentions.has(client.user)) return;
+  //   console.log(msg);
+
+  if (!msg.content.startsWith("<> ")) return;
+  //   if (!msg.mentions.has(client.user)) return;
 
   const prompt = msg.content.split("> ")[1];
   gpt2(prompt, msg.channel);
