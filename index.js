@@ -10,23 +10,24 @@ client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`); // Prefix messages to me with @DiscoBot
 });
 
+//
 const gpt2 = (prompt, channel) => {
-  console.log("Model prompt >>>", prompt);
+  channel.send("Model prompt >>> " + prompt);
 
   // 124M 355M 774M 1558M
-  const docker = spawn(
+  const process = spawn(
     "docker",
     "run -i gpt-2 python src/interactive_conditional_samples.py --model_name=1558M".split(
       " "
     )
   );
 
-  //   docker.stderr.on("data", (data) => {
+  //   process.stderr.on("data", (data) => {
   //     console.error("stderr:", data.toString());
   //   });
 
-  docker.stdout.on("data", function (data) {
-    // console.log("stdout: received from docker:", data.toString());
+  process.stdout.on("data", function (data) {
+    // console.log("stdout: received from process:", data.toString());
     for (const s of data.toString().split("\n")) {
       if (
         !s ||
@@ -39,43 +40,54 @@ const gpt2 = (prompt, channel) => {
     }
   });
 
-  //   docker.stdout.on("end", function () {
-  //     console.log("stdout: docker end");
+  //   process.stdout.on("end", function () {
+  //     console.log("stdout: process end");
   //   });
 
-  docker.stdin.write(prompt + "\n");
-  docker.stdin.end(); // XXX do we need this or can we keep this 'open'?
+  process.stdin.write(prompt + "\n");
+  process.stdin.end(); // XXX do we need this or can we keep this 'open'?
 };
 
+//
+const covidStatistics = (channel) => {
+  channel.send("Getting CovidStatistics");
+
+  const process = spawn(
+    "java",
+    "-jar ../CovidStatistieken/CovidStatistieken.jar".split(" ")
+  );
+
+  // process.stderr.on("data", (data) => {
+  //   console.error("stderr:", data.toString());
+  // });
+
+  process.stdout.on("data", function (data) {
+    const s = data.toString();
+    // console.log(s);
+    s && channel.send(s);
+  });
+
+  // process.stdout.on("end", function () {
+  //   console.log("stdout: process end");
+  // });
+
+  // process.stdin.write(prompt + "\n");
+  // process.stdin.end(); // XXX do we need this or can we keep this 'open'?
+};
+
+//
 client.on("message", (msg) => {
   //   console.log(msg);
 
-  if (!msg.content.startsWith("<> ")) return;
-  //   if (!msg.mentions.has(client.user)) return;
-
-  const prompt = msg.content.split("> ")[1];
-  gpt2(prompt, msg.channel);
-
-  /*
-  switch (msg.content) {
-    case "ping":
-      msg.reply("pong");
-      break;
-
-    case "hello":
-      msg.reply("hello to you too " + msg.author.username);
-      break;
-
-    // case "whoami":
-    //   //   console.log(JSON.stringify(msg, null, 2));
-    //   msg.reply(JSON.stringify(msg, null, 2));
-    //   break;
-
-    default:
-      if (msg.content.startsWith("gpt2 ")) {
-        gpt2(msg.content.substr(5), msg.channel);
-      }
-      break;
+  if (msg.content.startsWith("/covid")) {
+    const content = msg.content.substr(6).trim();
+    covidStatistics(msg.channel);
   }
-  */
+
+  if (msg.content.startsWith("/gpt2")) {
+    const content = msg.content.substr(5).trim();
+    gpt2(content, msg.channel);
+  }
 });
+
+// the end
