@@ -12,37 +12,38 @@ client.on("ready", () => {
 
 //
 const gpt2 = (prompt, channel) => {
-  channel.send("Model prompt >>> " + prompt);
+  channel.send("Starting gpt2 engine...");
 
-  // 124M 355M 774M 1558M
+  // 124M 345M (774M 1558M)
   const process = spawn(
     "docker",
-    "run -i gpt-2 python src/interactive_conditional_samples.py --model_name=1558M".split(
+    "run -i gpt-2 python src/interactive_conditional_samples.py --model_name=345M".split(
       " "
     )
   );
 
-  //   process.stderr.on("data", (data) => {
-  //     console.error("stderr:", data.toString());
-  //   });
+  // process.stderr.on("data", (data) => {
+  //   console.error("stderr:", data.toString());
+  // });
 
   process.stdout.on("data", function (data) {
     // console.log("stdout: received from process:", data.toString());
     for (const s of data.toString().split("\n")) {
-      if (
-        !s ||
-        s.startsWith("=============") ||
-        s.startsWith("Model prompt >>>")
-      )
+      if (!s || !s.trim() || s.startsWith("=============")) {
         continue;
+      }
+      if (s.startsWith("Model prompt >>>")) {
+        channel.send("Model prompt >>> " + prompt);
+        continue;
+      }
       console.log(prompt + " : " + s);
       channel.send(prompt + " : " + s);
     }
   });
 
-  //   process.stdout.on("end", function () {
-  //     console.log("stdout: process end");
-  //   });
+  // process.stdout.on("end", function () {
+  //   console.log("stdout: process end");
+  // });
 
   process.stdin.write(prompt + "\n");
   process.stdin.end(); // XXX do we need this or can we keep this 'open'?
@@ -64,7 +65,7 @@ const covidStatistics = (channel) => {
   process.stdout.on("data", function (data) {
     const s = data.toString();
     // console.log(s);
-    s && channel.send(s);
+    s && s.trim() && channel.send(s);
   });
 
   // process.stdout.on("end", function () {
