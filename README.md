@@ -1,2 +1,13 @@
 # discobot
+
 A bot for Discord using gpt-2
+
+The files in the scraped folder are for finetuning the gpt-2 NLP model.
+
+They will in this format:
+
+- Q: ...
+- A: ...
+
+- Q: ...
+- A: ...
