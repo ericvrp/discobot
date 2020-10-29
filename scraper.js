@@ -1,6 +1,16 @@
 const fetch = require("node-fetch");
 const puppeteer = require("puppeteer");
 
+const cleanup = (s) => {
+  if (!s) return "";
+  s = s.trim();
+  s = s.split("\n").join(", ");
+  s = s.split("<br>").join(", ");
+  s = s.split("<br/>").join(", ");
+  s = s.split("<br />").join(", ");
+  return s.trim();
+};
+
 const fetchAll = async () => {
   const posts_per_page = 10000;
   const page = 0;
@@ -35,8 +45,8 @@ const fetchAll = async () => {
     filteredArticleArray.pop(); // skip 'Love, Nick'
 
     if (postTitle && filteredArticleArray.length) {
-      console.log("Q:", postTitle);
-      console.log("A:", filteredArticleArray.join(" "));
+      console.log("Q:", cleanup(postTitle));
+      console.log("A:", cleanup(filteredArticleArray.join(" ")));
       console.log("");
     }
   }
