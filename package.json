@@ -4,8 +4,9 @@
   "description": "A bot for Discord using gpt-2",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node index",
     "dev": "npx nodemon -q",
+    "scraper": "node scraper > scraped/NickCave.txt",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -21,6 +22,7 @@
   "homepage": "https://github.com/ericvrp/discobot#readme",
   "dependencies": {
     "discord.js": "^12.4.1",
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "puppeteer": "^5.4.1"
   }
 }
