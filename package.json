@@ -6,7 +6,12 @@
   "scripts": {
     "start": "node index",
     "dev": "npx nodemon -q",
-    "scraper": "node scraper > scraped/NickCave.txt",
+    "scraper": "node scraper > scraped/theredhandfiles.txt",
+    "encode-177M": "python encode.py --model_name=117M ..discobotscraped\theredhandfiles.txt ..discobotscraped\theredhandfiles-117M.npz",
+    "encode-345M": "python encode.py --model_name=117M ..discobotscraped\theredhandfiles.txt ..discobotscraped\theredhandfiles-345M.npz",
+    "encode-774M": "python encode.py --model_name=117M ..discobotscraped\theredhandfiles.txt ..discobotscraped\theredhandfiles-774M.npz",
+    "encode-1558M": "python encode.py --model_name=117M ..discobotscraped\theredhandfiles.txt ..discobotscraped\theredhandfiles-1558M.npz",
+    "encode": "npm run encode-177M && npm run encode-345M && npm run encode-774M && npm run encode-1558M",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -23,6 +28,7 @@
   "dependencies": {
     "discord.js": "^12.4.1",
     "dotenv": "^8.2.0",
+    "node-fetch": "^2.6.1",
     "puppeteer": "^5.4.1"
   }
 }

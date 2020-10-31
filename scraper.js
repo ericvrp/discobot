@@ -11,7 +11,7 @@ const cleanup = (s) => {
   return s.trim();
 };
 
-const fetchAll = async () => {
+const parseTheRedHandFiles = async (verbose = false) => {
   const posts_per_page = 10000;
   const page = 0;
   const url = `https://www.theredhandfiles.com/wp-admin/admin-ajax.php?id=&post_id=0&slug=home&canonical_url=https%3A%2F%2Fwww.theredhandfiles.com%2F&posts_per_page=${posts_per_page}&page=${page}&offset=0&post_type=post&repeater=default&seo_start_page=1&preloaded=false&preloaded_amount=0&order=DESC&orderby=date&action=alm_get_posts&query_type=standard`;
@@ -45,13 +45,15 @@ const fetchAll = async () => {
     filteredArticleArray.pop(); // skip 'Love, Nick'
 
     if (postTitle && filteredArticleArray.length) {
-      console.log("Q:", cleanup(postTitle));
-      console.log("A:", cleanup(filteredArticleArray.join(" ")));
-      console.log("");
+      console.log((verbose ? "Q: " : "") + cleanup(postTitle));
+      console.log(
+        (verbose ? "A: " : "") + cleanup(filteredArticleArray.join(" "))
+      );
+      verbose && console.log("");
     }
   }
 
   await browser.close();
-};
+}; // end of parseTheRedHandFiles
 
-fetchAll();
+parseTheRedHandFiles(false);
