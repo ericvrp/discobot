@@ -1,7 +1,7 @@
 const fetch = require("node-fetch");
 const puppeteer = require("puppeteer");
-const scrapeTheRedHandFiles = require("./theredhandfiles");
-const scrapeAzLyrics = require("./azlyrics");
+const { scrapeTheRedHandFiles } = require("./theredhandfiles");
+const { scrapeAzLyricsByArtist } = require("./azlyrics");
 
 switch (process.argv[2]) {
   case "theredhandfiles":
@@ -9,6 +9,6 @@ switch (process.argv[2]) {
     break;
 
   default:
-    scrapeAzLyrics(process.argv[2], true);
+    scrapeAzLyricsByArtist(process.argv[2]);
     break;
 }

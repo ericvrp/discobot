@@ -1,7 +1,8 @@
 const fetch = require("node-fetch");
-const puppeteer = require("puppeteer");
+const puppeteer = require("puppeteer"); // https://github.com/puppeteer/puppeteer
 const { cleanup } = require("./tools");
 
+//
 const scrapeTheRedHandFiles = async (verbose = false) => {
   const posts_per_page = 10000;
   const page = 0;
@@ -47,4 +48,5 @@ const scrapeTheRedHandFiles = async (verbose = false) => {
   await browser.close();
 }; // end of scrapeTheRedHandFiles(verbose)
 
-module.exports = scrapeTheRedHandFiles;
+//
+module.exports = { scrapeTheRedHandFiles };
