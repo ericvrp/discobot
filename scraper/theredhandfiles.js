@@ -1,17 +1,8 @@
 const fetch = require("node-fetch");
 const puppeteer = require("puppeteer");
+const { cleanup } = require("./tools");
 
-const cleanup = (s) => {
-  if (!s) return "";
-  s = s.trim();
-  s = s.split("\n").join(", ");
-  s = s.split("<br>").join(", ");
-  s = s.split("<br/>").join(", ");
-  s = s.split("<br />").join(", ");
-  return s.trim();
-};
-
-const parseTheRedHandFiles = async (verbose = false) => {
+const scrapeTheRedHandFiles = async (verbose = false) => {
   const posts_per_page = 10000;
   const page = 0;
   const url = `https://www.theredhandfiles.com/wp-admin/admin-ajax.php?id=&post_id=0&slug=home&canonical_url=https%3A%2F%2Fwww.theredhandfiles.com%2F&posts_per_page=${posts_per_page}&page=${page}&offset=0&post_type=post&repeater=default&seo_start_page=1&preloaded=false&preloaded_amount=0&order=DESC&orderby=date&action=alm_get_posts&query_type=standard`;
@@ -54,6 +45,6 @@ const parseTheRedHandFiles = async (verbose = false) => {
   }
 
   await browser.close();
-}; // end of parseTheRedHandFiles
+}; // end of scrapeTheRedHandFiles(verbose)
 
-parseTheRedHandFiles(false);
+module.exports = scrapeTheRedHandFiles;
