@@ -1,14 +1,18 @@
 const fetch = require("node-fetch");
 const puppeteer = require("puppeteer");
 const { scrapeTheRedHandFiles } = require("./theredhandfiles");
-const { scrapeAzLyricsByArtist } = require("./azlyrics");
+const {
+  scrapeAzLyricsByArtist,
+  scrapeAzLyricsByArtistUrl,
+  scrapeAzLyricsBySongUrl,
+} = require("./azlyrics");
 
-switch (process.argv[2]) {
-  case "theredhandfiles":
-    scrapeTheRedHandFiles(true);
-    break;
-
-  default:
-    scrapeAzLyricsByArtist(process.argv[2]);
-    break;
+const cmd = process.argv[2];
+if (cmd === "theredhandfiles") {
+  scrapeTheRedHandFiles(true);
+} else if (cmd.startsWith("https://")) {
+  if (cmd.includes("/lyrics")) scrapeAzLyricsBySongUrl(cmd);
+  else scrapeAzLyricsByArtistUrl(cmd);
+} else {
+  scrapeAzLyricsByArtist(cmd);
 }

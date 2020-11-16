@@ -1,27 +1,44 @@
 const puppeteer = require("puppeteer"); // https://github.com/puppeteer/puppeteer
 // const { cleanup } = require("./tools");
 
-// https://search.azlyrics.com/search.php?q=elvis+presley
-const scrapeAzLyricsByArtist = async (artist = "elvis presley") => {
-  const searchUrl = `https://search.azlyrics.com/search.php?q=${artist}`;
-  process.stderr.write(`searchUrl: ${searchUrl}\n`);
-
+//
+const _startPuppeteer = async () => {
   browser = await puppeteer.launch({
-    slowMo: 1 * 1000, // slow down by 1s
+    slowMo: 2 * 1000, // slow down by 2s
   }); // global
   page = await browser.newPage(); // global
   // page.on("console", (msg) =>
   //   process.stderr.write(`PAGE LOG: ${msg.text()}\n`)
   // );
+};
+
+const _stopPuppeteer = async () => {
+  browser.close();
+  delete browser, page; // delete global to make sure we don't reuse them
+};
+
+// https://search.azlyrics.com/search.php?q=elvis+presley
+const scrapeAzLyricsByArtist = async (artist = "elvis presley") => {
+  const searchUrl = `https://search.azlyrics.com/search.php?q=${artist}`;
+  process.stderr.write(`searchUrl: ${searchUrl}\n`);
+
+  await _startPuppeteer();
 
   await page.goto(searchUrl);
   const artistUrl = await page.$eval("td a", (x) => x.href);
-  await scrapeAzLyricsByArtistUrl(artistUrl);
 
-  browser.close();
+  await _scrapeAzLyricsByArtistUrl(artistUrl);
+
+  await_stopPuppeteer();
 };
 
 const scrapeAzLyricsByArtistUrl = async (artistUrl) => {
+  await _startPuppeteer();
+  await _scrapeAzLyricsByArtistUrl(artistUrl);
+  await _stopPuppeteer();
+};
+
+const _scrapeAzLyricsByArtistUrl = async (artistUrl) => {
   process.stderr.write(`artistUrl: ${artistUrl}\n`);
 
   await page.goto(artistUrl);
@@ -29,13 +46,19 @@ const scrapeAzLyricsByArtistUrl = async (artistUrl) => {
     songs.map((song) => song.href)
   );
   for (const songUrl of songUrls) {
-    await scrapeAzLyricsBySongUrl(songUrl);
+    await _scrapeAzLyricsBySongUrl(songUrl);
     // break; // XXX
   }
 };
 
 //
 const scrapeAzLyricsBySongUrl = async (songUrl) => {
+  await _startPuppeteer();
+  await _scrapeAzLyricsBySongUrl(songUrl);
+  await _stopPuppeteer();
+};
+
+const _scrapeAzLyricsBySongUrl = async (songUrl) => {
   process.stderr.write(`songUrl: ${songUrl}\n`);
 
   await page.goto(songUrl);
