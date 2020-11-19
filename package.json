@@ -11,6 +11,7 @@
     "scrape-nickcave": "node scraper/scraper https://www.azlyrics.com/n/nickcavethebadseeds.html > scraped/nickcave.txt",
     "scrape-vanmorrison": "node scraper/scraper https://www.azlyrics.com/v/vanmorrison.html > scraped/vanmorrison.txt",
     "scrape-u2": "node scraper/scraper https://www.azlyrics.com/u/u2band.html > scraped/u2.txt",
+    "scrape-dylan": "node scraper/scraper https://www.azlyrics.com/d/dylan.html > scraped/dylan.txt",
     "scrape-beatles": "node scraper/scraper https://www.azlyrics.com/b/beatles.html > scraped/beatles.txt"
   },
   "repository": {
